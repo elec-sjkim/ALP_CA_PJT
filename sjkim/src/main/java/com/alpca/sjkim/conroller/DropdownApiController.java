@@ -2,10 +2,7 @@ package com.alpca.sjkim.conroller;
 
 import com.alpca.sjkim.service.DropdownService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +16,10 @@ public class DropdownApiController {
     @GetMapping("/cityUnique")
     public List<String> cityUnique() {
         return dropdownService.getCityNameList();
+    }
+
+    @GetMapping("/districtUnique")
+    public List<String> districtUnique(@RequestParam(defaultValue = "") String cityName) {
+        return dropdownService.getDistrictNameList(cityName);
     }
 }

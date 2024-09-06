@@ -36,5 +36,14 @@ class SjkimApplicationTests {
 		System.out.println(cityList);
 	}
 
+	@Test
+	void getDistrictName() {
+		List<History> historyList = historyRepository.findByCityinfo_CityName("서울특별시");
+		List<String> districtList = historyList.stream().map(History::getCityinfo)
+				.map(Cityinfo::getDistrictName)
+				.distinct()
+				.collect(Collectors.toList());
+		System.out.println(districtList);
+	}
 
 }

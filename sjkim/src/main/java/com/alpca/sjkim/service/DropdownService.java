@@ -23,5 +23,14 @@ public class DropdownService {
         return cityList;
     }
 
+    public List<String> getDistrictNameList(String cityName) {
+        List<History> historyList = historyRepository.findByCityinfo_CityName(cityName);
+        List<String> districtList = historyList.stream().map(History::getCityinfo)
+                .map(Cityinfo::getDistrictName)
+                .distinct()
+                .collect(Collectors.toList());
+        return districtList;
+    }
+
 
 }
