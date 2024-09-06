@@ -13,11 +13,13 @@ public class DropdownApiController {
     @Autowired
     private DropdownService dropdownService;
 
+    @CrossOrigin()
     @GetMapping("/cityUnique")
     public List<String> cityUnique() {
         return dropdownService.getCityNameList();
     }
 
+    @CrossOrigin()
     @GetMapping("/districtUnique")
     public List<String> districtUnique(@RequestParam(defaultValue = "") String cityName) {
         return dropdownService.getDistrictNameList(cityName);
