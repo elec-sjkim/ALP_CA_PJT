@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CityRankDto {
-    private String cityCode;
     private String cityName;
     private Double totalVisit;
 }

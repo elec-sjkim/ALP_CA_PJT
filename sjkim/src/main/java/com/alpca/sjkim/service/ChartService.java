@@ -83,12 +83,7 @@ public class ChartService {
                     String cityName = entry.getKey();
                     Double totalVisit = entry.getValue();
 
-                    // cityName으로 Cityinfo를 조회하여 cityCode 가져옴
-                    List<Cityinfo> cityInfos = cityinfoRepository.findByCityName(cityName);
-                    Cityinfo cityInfo = cityInfos.get(0);
-
                     return new CityRankDto(
-                            cityInfo.getCityCode(), // cityCode 가져옴
                             cityName,
                             totalVisit
                     );
