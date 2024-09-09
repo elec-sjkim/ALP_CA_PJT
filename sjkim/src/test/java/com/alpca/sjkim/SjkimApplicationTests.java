@@ -3,6 +3,7 @@ package com.alpca.sjkim;
 import com.alpca.sjkim.dto.ChartAvgDto;
 import com.alpca.sjkim.dto.CityRankDto;
 import com.alpca.sjkim.dto.DistrictRankDto;
+import com.alpca.sjkim.dto.visitHistoryDto;
 import com.alpca.sjkim.entity.Cityinfo;
 import com.alpca.sjkim.entity.History;
 import com.alpca.sjkim.repository.CityinfoRepository;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -123,6 +125,40 @@ class SjkimApplicationTests {
 				.collect(Collectors.toList()); // 리스트로 변환
 
 		System.out.println(rankByCity);
-
 	}
+
+	@Test
+	void getCityCode() {
+		Cityinfo cityInfo = cityinfoRepository.findByCityNameAndDistrictName("서울특별시", "용산구");
+		System.out.println(cityInfo.getCityCode());
+	}
+
+	@Test
+	void getHistoryByDate() {
+		Cityinfo cityinfo = cityinfoRepository.findByCityNameAndDistrictName("서울특별시", "용산구");
+		String cityCode = cityinfo.getCityCode();
+
+		List<History> results = historyRepository.findByDateYmdBetweenAndCityinfo_CityCode(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-12-31"), cityCode);
+
+		List<visitHistoryDto> historyDatas = results.stream()
+						.collect(Collectors.groupingBy(
+								History::getDateYmd,
+								Collectors.summingDouble(History::getTotNum)
+						))
+								.entrySet().stream()
+				.sorted(Map.Entry.comparingByKey())
+								.map(entry -> {
+									return new visitHistoryDto(
+											entry.getKey(),
+											entry.getValue(),
+											cityinfo
+									);
+								}).collect(Collectors.toList());
+
+		System.out.println(historyDatas);
+	}
+
+
+
+
 }

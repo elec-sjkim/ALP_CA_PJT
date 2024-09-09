@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Integer> {
@@ -18,6 +17,7 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
 
     List<History> findByDateYmdBetween(LocalDate startDate, LocalDate endDate);
 
+    List<History> findByDateYmdBetweenAndCityinfo_CityCode(LocalDate startDate, LocalDate endDate, String cityCode);
 
     @Query("SELECT c.cityCode AS cityCode, c.cityName AS cityName, c.districtName AS districtName, " +
             "ROUND(AVG(h.totNum), 2) AS avgTotNum " +

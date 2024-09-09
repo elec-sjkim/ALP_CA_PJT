@@ -3,6 +3,7 @@ package com.alpca.sjkim.service;
 import com.alpca.sjkim.dto.ChartAvgDto;
 import com.alpca.sjkim.dto.CityRankDto;
 import com.alpca.sjkim.dto.DistrictRankDto;
+import com.alpca.sjkim.dto.visitHistoryDto;
 import com.alpca.sjkim.entity.Cityinfo;
 import com.alpca.sjkim.entity.History;
 import com.alpca.sjkim.repository.CityinfoRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,8 +94,28 @@ public class ChartService {
         return rankByCity;
     }
 
+    public List<visitHistoryDto> getVisitHistory(String cityName, String districtName, String startDate, String endDate) {
+        Cityinfo cityinfo = cityinfoRepository.findByCityNameAndDistrictName(cityName, districtName);
+        String cityCode = cityinfo.getCityCode();
 
+        List<History> results = historyRepository.findByDateYmdBetweenAndCityinfo_CityCode(LocalDate.parse(startDate), LocalDate.parse(endDate), cityCode);
 
+        List<visitHistoryDto> historyDatas = results.stream()
+                .collect(Collectors.groupingBy(
+                        History::getDateYmd,
+                        Collectors.summingDouble(History::getTotNum)
+                ))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> {
+                    return new visitHistoryDto(
+                            entry.getKey(),
+                            entry.getValue(),
+                            cityinfo
+                    );
+                }).collect(Collectors.toList());
 
+        return historyDatas;
+    }
 
 }
