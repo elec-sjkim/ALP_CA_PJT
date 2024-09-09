@@ -1,13 +1,12 @@
 package com.alpca.sjkim.conroller;
 
 import com.alpca.sjkim.dto.ChartAvgDto;
+import com.alpca.sjkim.dto.CityRankDto;
+import com.alpca.sjkim.dto.DistrictRankDto;
+import com.alpca.sjkim.entity.Cityinfo;
 import com.alpca.sjkim.service.ChartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,17 @@ public class ChartApiController {
     @GetMapping("/getAvgVisit")
     public List<ChartAvgDto> getAverageVisit() {
         return chartService.getAvgVisit();
+    }
+
+    @CrossOrigin()
+    @GetMapping("/getDistrictRank")
+    public List<DistrictRankDto> getDistrictRank(@RequestParam("year") int year) {
+        return chartService.getRankDistrict(year);
+    }
+
+    @CrossOrigin()
+    @GetMapping("/getCityRank")
+    public List<CityRankDto> getCityRank(@RequestParam("year") int year) {
+        return chartService.getRankCity(year);
     }
 }

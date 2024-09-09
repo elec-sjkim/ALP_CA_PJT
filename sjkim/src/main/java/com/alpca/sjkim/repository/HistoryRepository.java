@@ -1,6 +1,7 @@
 package com.alpca.sjkim.repository;
 
 import com.alpca.sjkim.dto.ChartAvgDto;
+import com.alpca.sjkim.entity.Cityinfo;
 import com.alpca.sjkim.entity.History;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ import java.util.Objects;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Integer> {
     List<History> findByCityinfo_CityName(String cityName);
+
+    List<History> findByDateYmdBetween(LocalDate startDate, LocalDate endDate);
+
 
     @Query("SELECT c.cityCode AS cityCode, c.cityName AS cityName, c.districtName AS districtName, " +
             "ROUND(AVG(h.totNum), 2) AS avgTotNum " +
